@@ -18,10 +18,10 @@ func NewUserController (s services.UserService) *UserController {
 func (c *UserController) Register(ctx *fiber.Ctx) error {
 	user := new(models.User)
 	if err := ctx.BodyParser(user); err != nil {
-		return utils.BadRequest(ctx, "Gagal Parsing Data", err.Error())
+		return utils.BadRequest(ctx, "Data Parsing Failed", err.Error())
 	}
 	if err := c.service.Register(user); err !=nil {
-		return utils.BadRequest(ctx, "Registrasi Gagal", err.Error())
+		return utils.BadRequest(ctx, "Registration Failed", err.Error())
 	}
-	return utils.Success(ctx, "Registrasi Berhasil", user)
+	return utils.Success(ctx, "Registration Success", user)
 }
