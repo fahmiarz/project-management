@@ -78,17 +78,17 @@ func (c *UserController) GetUserPagination(ctx *fiber.Ctx) error {
 	// 100 / 10 = 10 page
 	page ,_ := strconv.Atoi(ctx.Query("page", "1"))
 	limit ,_ := strconv.Atoi(ctx.Query("limit", "10"))
-	offset := (page -1) * limit 
+	offset := (page -1) * limit
 
 	filter := ctx.Query("filter", "")
 	sort := ctx.Query("sort", "")
 
-	users, total, err := c.service.GetAllPagination(filter, sort, limit, offset) 
+	users, total, err := c.service.GetAllPagination(filter, sort, limit, offset)
 	if err !=nil {
 		return utils.BadRequest(ctx, "Failed to load data", err.Error())
 	}
-	
-	var userResp []models.UserResponse 
+
+	var userResp []models.UserResponse
 	_ = copier.Copy(&userResp, &users)
 
 	meta := utils.PaginationMeta {
@@ -117,7 +117,7 @@ func (c *UserController) UpdateUser(ctx *fiber.Ctx) error {
 		return utils.BadRequest(ctx, "Failed to parse data", err.Error())
 	}
 	user.PublicID = publicID
-	
+
 	if err := c.service.Update(&user); err != nil {
 		return utils.BadRequest(ctx, "Failed updated data", err.Error())
 	}
