@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd /d/Development/project-management && rm -rf cmd/migrate)",
+      "Bash(cd /d/Development/project-management && go mod tidy)"
+    ]
+  }
+}
