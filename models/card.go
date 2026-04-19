@@ -17,7 +17,7 @@ type Card struct {
 	CreatedAt 		time.Time 	`json:"created_at" db:"created_at"`
 
 	//relasi
-	Assigness []CardAssignee `json:"assigness,omitempty" gorm:"foreignKey:CardID;reference:InternalID"`
+	Assignees []CardAssignee `json:"assignees,omitempty" gorm:"foreignKey:CardID;reference:InternalID"`
 	Attachments []CardAttachment `json:"attachments,omitempty" gorm:"foreignKey:CardID;reference:InternalID"`
 	Labels []CardLabel `json:"labels,omitempty" gorm:"foreignKey:CardID;reference:InternalID"`
 }

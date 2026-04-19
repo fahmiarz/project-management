@@ -13,6 +13,7 @@ type CardRepository interface {
 	Create(card *models.Card) error
 	Update(card *models.Card) error
 	Delete(id uint) error
+	
 	FindByID(id uint) (*models.Card, error)
 	FindByPublicID(publicID string) (*models.Card, error)
 	FindByListID(listID string)([]models.Card, error)
@@ -40,7 +41,7 @@ func (r *cardRepository) Delete(id uint) error {
 
 func (r *cardRepository) FindByID(id uint) (*models.Card, error) {
 	var card models.Card
-	err := config.DB.Preload("Labels").Preload("Assigness").First(&card,id).Error
+	err := config.DB.Preload("Labels").Preload("Assignees").First(&card,id).Error
 	return &card, err
 }
 
@@ -59,4 +60,13 @@ func (r* cardRepository) FindByPublicID(publicID string) (*models.Card, error) {
 		)
 	} 
 	return &card, nil
+}
+
+func (r* cardRepository) FindByListID(listID string) ([]models.Card, error) {
+	var cards []models.Card
+	err := config.DB.Joins("JOIN lists ON lists.internal_id = cards.list_internal_id").
+	Where("lists.public_id = ?", listID).
+	Order("position ASC").
+	Find(&cards).Error
+return cards, err
 }
