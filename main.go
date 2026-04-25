@@ -37,10 +37,16 @@ func main() {
 	listService := services.NewListService(listRepo, boardRepo, listPosRepo)
 	listController := controllers.NewListController(listService)
 
+	//card
+	cardRepo := repositories.NewCardRepository()
+	cardService := services.NewCardService(cardRepo, listRepo, userRepo)
+	cardController := controllers.NewCardController(cardService)
+
 	routes.Setup(app, 
 		userController,
 		boardController,
 		listController,
+		cardController,
 	)
 
 	port:= config.AppConfig.AppPort

@@ -17,6 +17,9 @@ type CardRepository interface {
 	FindByID(id uint) (*models.Card, error)
 	FindByPublicID(publicID string) (*models.Card, error)
 	FindByListID(listID string)([]models.Card, error)
+
+	FindCardPositionByListID(id int64) (*models.CardPosition, error)
+	UpdatePosition(listID string, position []string) error
 }
 
 type cardRepository struct {
@@ -69,4 +72,19 @@ func (r* cardRepository) FindByListID(listID string) ([]models.Card, error) {
 	Order("position ASC").
 	Find(&cards).Error
 return cards, err
+}
+
+func (r* cardRepository) FindCardPositionByListID(id int64) (*models.CardPosition, error) {
+	var position models.CardPosition
+	err := config.DB.Where("list_internal_id = ?", id).First(&position).Error
+	if err != nil {
+		return nil, err
+	}
+	return &position, nil
+}
+
+func (r* cardRepository) UpdatePosition(listID string, position []string) error {
+	return config.DB.Model(&models.CardPosition{}).
+	Where("list_internal_id = (SELECT internal_id FROM lists Where public_id = ?", listID).
+	Update("card_order", position).Error
 }
